@@ -288,7 +288,7 @@ function postCanvasToFacebook(c) {
     }
 
     function helper() {
-        postImageToFacebook(FB.getAuthResponse()['accessToken'], 'testing1', 'image/png', data, 'glittle.org')
+        postImageToFacebook(FB.getAuthResponse()['accessToken'], 'testing1', 'image/png', data, location.href)
     }
 
     var data = c.toDataURL("image/png")
