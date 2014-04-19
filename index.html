@@ -269,9 +269,16 @@ function postCanvasToFacebook(c) {
         var formData = '--' + boundary + '\r\n'
         formData += 'Content-Disposition: form-data; name="source"; filename="' + filename + '"\r\n'
         formData += 'Content-Type: ' + mimeType + '\r\n\r\n'
-        for (var i = 0; i < imageData.length; i++) {
-            formData += String.fromCharCode(imageData[i] & 0xff)
-        }
+
+
+        // work here
+        formData += imageData
+
+        // for (var i = 0; i < imageData.length; i++) {
+        //     formData += String.fromCharCode(imageData.charCodeAt(i) & 0xff)
+        // }
+
+
         formData += '\r\n'
         formData += '--' + boundary + '\r\n'
         formData += 'Content-Disposition: form-data; name="message"\r\n\r\n'
