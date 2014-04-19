@@ -291,7 +291,7 @@ function postCanvasToFacebook(c) {
         postImageToFacebook(FB.getAuthResponse()['accessToken'], 'testing1', 'image/png', data, location.href)
     }
 
-    var data = c.toDataURL("image/png")
+    var data = c[0].toDataURL("image/png")
     data = data.slice(data.indexOf(',') + 1)
     data = Base64.decode(data)
     waitForFacebook(function () {
