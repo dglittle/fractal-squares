@@ -27,6 +27,7 @@ th, td {
 <script>
 
 $(function () {
+    var showInstructions = true
     var colorSeed = null
     var maxDepth = 10
 
@@ -147,9 +148,11 @@ $(function () {
             drag.start = pos
         }, function (diff, pos) {
             maxDepth = 10
+            showInstructions = false
+            if (instructions) instructions.remove()
+
             if (drag.part == 'center') {
                 drag.square[2] = add(drag.square[2], mul(diff, 1/size))
-                render()
             } else {
                 var lastPos = sub(pos, diff)
                 var p = sub(lastPos, mul(drag.square[2], size))
@@ -162,9 +165,8 @@ $(function () {
                 m = matmul(drag.square.slice(0, 2), m)
                 drag.square[0] = m[0]
                 drag.square[1] = m[1]
-
-                render()
             }
+            render()
         })
 
         main.empty().append(c).append(drawForkMe())
@@ -178,7 +180,7 @@ $(function () {
                 var sin = Math.sin(angle) * scale
                 return 'matrix(' + cos + ',' + sin + ',' + -sin + ',' + cos + ',0,0)'
             }
-            return $('<div style="margin:' + size/6/7 + 'px;background:rgba(0,0,0,.1);width:' + size/6 + 'px;height:' + size/6 + 'px;-webkit-transform:' + randomMatrix() + ';-webkit-transition:-webkit-transform .7s cubic-bezier(.3,-10,.6,10);transform:' + randomMatrix() + ';transition:transform .7s cubic-bezier(.3,-10,.6,10)"/>').append(center(label)).click(function () {
+            return $('<div style="margin:' + size/6/7 + 'px;background:rgba(0,0,0,.1);width:' + size/6 + 'px;height:' + size/6 + 'px;-webkit-transform:' + randomMatrix() + ';-webkit-transition:-webkit-transform .7s cubic-bezier(.3,-10,.6,10);transform:' + randomMatrix() + ';transition:transform .7s cubic-bezier(.3,-10,.6,10)"/>').append(center(label.css('font-size', size/6/6 + 'px'))).click(function () {
                 leaning = !leaning
                 $(this).myCss('-webkit-transform:' + randomMatrix() + ';transform:' + randomMatrix())
                 cb()
@@ -204,12 +206,12 @@ $(function () {
                 colorSeed = null
                 render()
             }),
-            drawButton($('<div/>').html('share'), function () {
-                postCanvasToFacebook(c)
-            }),
             drawButton($('<div/>').html('see<br/>high<br/>depth'), function () {
                 maxDepth = 200
                 render()
+            }),
+            drawButton($('<div/>').html('post<br/>image to<br/>facebook'), function () {
+                postCanvasToFacebook(c)
             })
         ]
         var d = $('<div style="float:left">').append(buttons[0])
@@ -221,6 +223,11 @@ $(function () {
         } else {
             var rest = buttons.slice(1)
             d.myAppend(rest)
+        }
+
+        var instructions = null
+        if (showInstructions) {
+            main.append(instructions = $('<div style="font-size:' + size/28 + 'px;position:absolute;left:0px;top:' + size*3/4 + 'px;width:' + size + 'px;text-align:center"/>').html('drag center of a square to move<br/>drag edge of a square to rotate and resize'))
         }
     }
     update()
@@ -269,16 +276,7 @@ function postCanvasToFacebook(c) {
         var formData = '--' + boundary + '\r\n'
         formData += 'Content-Disposition: form-data; name="source"; filename="' + filename + '"\r\n'
         formData += 'Content-Type: ' + mimeType + '\r\n\r\n'
-
-
-        // work here
         formData += imageData
-
-        // for (var i = 0; i < imageData.length; i++) {
-        //     formData += String.fromCharCode(imageData.charCodeAt(i) & 0xff)
-        // }
-
-
         formData += '\r\n'
         formData += '--' + boundary + '\r\n'
         formData += 'Content-Disposition: form-data; name="message"\r\n\r\n'
