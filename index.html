@@ -134,7 +134,11 @@ $(function () {
 
     function update() {
         var size = _.min(getWindowSize())
-        var c = $('<canvas style="float:left"/>').attr({ width : size, height : size })
+        if (isRetina()) {
+            var c = $('<canvas style="float:left;width:' + size + 'px;height' + size + ':px"/>').attr({ width : size*2, height : size*2 })
+        } else {
+            var c = $('<canvas style="float:left"/>').attr({ width : size, height : size })
+        }
         var g = c[0].getContext('2d')
 
         function render() {
@@ -180,7 +184,7 @@ $(function () {
                 var sin = Math.sin(angle) * scale
                 return 'matrix(' + cos + ',' + sin + ',' + -sin + ',' + cos + ',0,0)'
             }
-            return $('<div style="margin:' + size/6/7 + 'px;background:rgba(0,0,0,.1);width:' + size/6 + 'px;height:' + size/6 + 'px;-webkit-transform:' + randomMatrix() + ';-webkit-transition:-webkit-transform .7s cubic-bezier(.3,-10,.6,10);transform:' + randomMatrix() + ';transition:transform .7s cubic-bezier(.3,-10,.6,10)"/>').append(center(label.css('font-size', size/6/6 + 'px'))).click(function () {
+            return $('<div style="margin:' + size/6/7 + 'px;background:rgba(0,0,0,.1);width:' + size/6.2 + 'px;height:' + size/6.2 + 'px;-webkit-transform:' + randomMatrix() + ';-webkit-transition:-webkit-transform .7s cubic-bezier(.3,-10,.6,10);transform:' + randomMatrix() + ';transition:transform .7s cubic-bezier(.3,-10,.6,10)"/>').append(center(label.css('font-size', size/6/6 + 'px'))).click(function () {
                 leaning = !leaning
                 $(this).myCss('-webkit-transform:' + randomMatrix() + ';transform:' + randomMatrix())
                 cb()

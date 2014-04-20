@@ -1,4 +1,12 @@
 
+function isMobile() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+}
+
+function isRetina() {
+    return window.devicePixelRatio > 1
+}
+
 function drawForkMe() {
     var m = window.location.href.match(/([^\/\.]+)\.github\.io\/([^\/]+)/)
     if (!m) return $('<div/>')
