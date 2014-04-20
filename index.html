@@ -193,7 +193,7 @@ $(function () {
             return $('<div style="position:absolute;background:rgba(0,0,0,.1);width:' + size/5 + 'px;height:' + size/5 + 'px;-webkit-transform:' + randomMatrix() + ';-webkit-transition:-webkit-transform .7s cubic-bezier(.3,-10,.6,10);transform:' + randomMatrix() + ';transition:transform .7s cubic-bezier(.3,-10,.6,10)"/>').append(center(label.css('font-size', size/5/6 + 'px'))).click(function () {
                 leaning = !leaning
                 $(this).myCss('-webkit-transform:' + randomMatrix() + ';transform:' + randomMatrix())
-                cb()
+                cb(label)
             })
         }
 
@@ -216,9 +216,13 @@ $(function () {
                 colorSeed = null
                 render()
             }),
-            drawButton($('<div/>').html('see<br/>high<br/>depth'), function () {
-                highDepth = true
-                render()
+            drawButton($('<div/>').html('see<br/>high<br/>depth'), function (label) {
+                label.html('working...')
+                setTimeout(function () {
+                    highDepth = true
+                    render()
+                    label.html('see<br/>high<br/>depth')
+                })
             }),
             drawButton($('<div/>').html('post<br/>image to<br/>facebook'), function () {
                 postCanvasToFacebook(c)
