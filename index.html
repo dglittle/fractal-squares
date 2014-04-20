@@ -214,13 +214,13 @@ $(function () {
                 colorSeed = null
                 render()
             }),
-            drawButton($('<div/>').html('see<br/>high<br/>depth'), function (label) {
-                label.html('working...')
-                setTimeout(function () {
-                    render(false, true)
-                    label.html('see<br/>high<br/>depth')
-                }, 200)
-            }),
+            // drawButton($('<div/>').html('see<br/>high<br/>depth'), function (label) {
+            //     label.html('working...')
+            //     setTimeout(function () {
+            //         render(false, true)
+            //         label.html('see<br/>high<br/>depth')
+            //     }, 200)
+            // }),
             drawButton($('<div/>').html('post<br/>image to<br/>facebook'), function () {
                 postCanvasToFacebook(c)
             })
