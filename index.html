@@ -29,7 +29,6 @@ th, td {
 $(function () {
     var showInstructions = true
     var colorSeed = null
-    var highDepth = false
 
     var squares = [
         [
@@ -91,7 +90,7 @@ $(function () {
             { part : 'edge', square : closestEdge }
     }
 
-    function triangleFractalize(c, dragging) {
+    function triangleFractalize(c, dragging, highDepth) {
         var size = c.attr('width')
         var prevC = null
 
@@ -145,8 +144,8 @@ $(function () {
         }
         var g = c[0].getContext('2d')
 
-        function render(dragging) {
-            triangleFractalize(c, dragging)
+        function render(dragging, highDepth) {
+            triangleFractalize(c, dragging, highDepth)
         }
         render()
 
@@ -155,7 +154,6 @@ $(function () {
             drag = pickSquare(mul(pos, 1/size))
             drag.start = pos
         }, function (diff, pos) {
-            highDepth = false
             showInstructions = false
             if (instructions) instructions.remove()
 
@@ -219,10 +217,9 @@ $(function () {
             drawButton($('<div/>').html('see<br/>high<br/>depth'), function (label) {
                 label.html('working...')
                 setTimeout(function () {
-                    highDepth = true
-                    render()
+                    render(false, true)
                     label.html('see<br/>high<br/>depth')
-                })
+                }, 200)
             }),
             drawButton($('<div/>').html('post<br/>image to<br/>facebook'), function () {
                 postCanvasToFacebook(c)
