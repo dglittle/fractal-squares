@@ -253,9 +253,8 @@ $(function () {
         }
         main.myAppend(buttons)
 
-        y += 5
-        main.append(drawFacebookButton().myCss('position:absolute;left:5px;top:' + y + 'px'))
-        main.append(drawTwitterButton().myCss('position:absolute;left:100px;top:' + y + 'px'))
+        main.append(drawFacebookButton().myCss('position:absolute;left:0px;top:' + y + 'px;padding:5px'))
+        main.append(drawTwitterButton().myCss('position:absolute;left:100px;top:' + y + 'px;padding:5px'))
 
         var instructions = null
         if (showInstructions) {
