@@ -232,7 +232,8 @@ $(function () {
             //     }, 200)
             // }),
             drawButton($('<div/>').html('post<br/>image to<br/>facebook'), function () {
-                postCanvasToFacebook(c)
+                var m = prompt('message to post with image?', 'I drew this using ' + location.href)
+                if (m) postCanvasToFacebook(c, m)
             })
         ]
         if (size + buttons[0].width() <= getWindowSize()[0]) {
@@ -290,7 +291,7 @@ if (XMLHttpRequest.prototype.sendAsBinary === undefined) {
 }
 
 // adapted from http://www.heroesgenerator.com/
-function postCanvasToFacebook(c) {
+function postCanvasToFacebook(c, message) {
     function postImageToFacebook(authToken, filename, mimeType, imageData, message)
     {
         var boundary = '----ThisIsTheBoundary1234567890'
@@ -314,7 +315,7 @@ function postCanvasToFacebook(c) {
     }
 
     function helper() {
-        postImageToFacebook(FB.getAuthResponse()['accessToken'], 'testing1', 'image/png', data, location.href)
+        postImageToFacebook(FB.getAuthResponse()['accessToken'], 'testing1', 'image/png', data, message)
     }
 
     var data = c[0].toDataURL("image/png")
