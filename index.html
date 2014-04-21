@@ -189,7 +189,12 @@ $(function () {
             render()
         })
 
-        main.empty().append(c).append(drawForkMe())
+        main.empty().append(c)
+        
+        var instructions = null
+        if (showInstructions) {
+            main.append(instructions = $('<div style="font-size:' + size/28 + 'px;position:absolute;left:0px;top:' + size*3/4 + 'px;width:' + size + 'px;text-align:center"/>').html('drag center of a square to move it<br/>drag edge of a square to rotate and resize it'))
+        }
 
         function drawButton(label, cb) {
             var leaning = Math.random() > 0.5
@@ -256,10 +261,8 @@ $(function () {
         main.append(drawFacebookButton().myCss('position:absolute;left:0px;top:' + y + 'px;padding:5px'))
         main.append(drawTwitterButton().myCss('position:absolute;left:100px;top:' + y + 'px;padding:5px'))
 
-        var instructions = null
-        if (showInstructions) {
-            main.append(instructions = $('<div style="font-size:' + size/28 + 'px;position:absolute;left:0px;top:' + size*3/4 + 'px;width:' + size + 'px;text-align:center"/>').html('drag center of a square to move it<br/>drag edge of a square to rotate and resize it'))
-        }
+        main.append(drawForkMe().myCss('top:' + (y + 30 - 64) + 'px').rotate(90))        
+
     }
     update()
     $(window).resize(update)

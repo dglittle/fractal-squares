@@ -1,9 +1,9 @@
 
 function drawForkMe() {
+    var url = ''
     var m = window.location.href.match(/([^\/\.]+)\.github\.io\/([^\/]+)/)
-    if (!m) return $('<div/>')
-    var url = 'https://github.com/' + m[1] + '/' + m[2]    
-    return $('<a href="' + url + '"><img width="64px" style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>')
+    if (m) url = 'https://github.com/' + m[1] + '/' + m[2]    
+    return $('<div style="position: absolute; top: 0; right: 0;"/>').append($('<a href="' + url + '"><img width="64px" style="border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>'))
 }
 
 function initTwitter() {
