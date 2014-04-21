@@ -239,21 +239,23 @@ $(function () {
                 if (m) postPngToFacebook(png, m)
             })
         ]
+        var y = 0
         if (size + buttons[0].width() <= getWindowSize()[0]) {
             _.each(buttons, function (b, i) {
                 b.myCss('left:' + size + 'px;top:' + (i*b.height()) + 'px')
             })
-            main.append(drawFacebookButton().myCss('position:absolute;left:0px;top:' + size + 'px'))
-            main.append(drawTwitterButton().myCss('position:absolute;left:100px;top:' + size + 'px'))
+            y = size
         } else {
             _.each(buttons, function (b, i) {
                 b.myCss('top:' + size + 'px;left:' + (i*b.width()) + 'px')
             })
-            var y = size + buttons[0].height()
-            main.append(drawFacebookButton().myCss('position:absolute;left:0px;top:' + y + 'px'))
-            main.append(drawTwitterButton().myCss('position:absolute;left:100px;top:' + y + 'px'))
+            y = size + buttons[0].height()
         }
         main.myAppend(buttons)
+
+        y += 5
+        main.append(drawFacebookButton().myCss('position:absolute;left:5px;top:' + y + 'px'))
+        main.append(drawTwitterButton().myCss('position:absolute;left:150px;top:' + y + 'px'))
 
         var instructions = null
         if (showInstructions) {

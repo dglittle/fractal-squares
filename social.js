@@ -13,7 +13,7 @@ function initTwitter() {
 function initFacebook(appId) {
     var callbacks = []
 
-    // $('body').prepend($('<div id="fb-root"></div>'))
+    $('body').prepend($('<div id="fb-root"></div>'))
     $.ajaxSetup({ cache: true });
     $.getScript('//connect.facebook.net/en_UK/all.js', function(){
         FB.init({
@@ -34,7 +34,7 @@ function initFacebook(appId) {
 
 function drawTwitterButton(message) {
     if (!message) message = document.title
-    var d = $('<a href="https://twitter.com/share" class="twitter-share-button">Tweet</a>').attr('data-text', message)
+    var d = $('<div/>').append($('<a href="https://twitter.com/share" class="twitter-share-button">Tweet</a>').attr('data-text', message))
     setTimeout(function () {
         if ((typeof twttr) != 'undefined')
             twttr.widgets.load()
@@ -43,7 +43,7 @@ function drawTwitterButton(message) {
 }
 
 function drawFacebookButton() {
-    var d = $('<div class="fb-like" data-href="' + location.href + '" data-layout="button_count" data-action="like" data-show-faces="true" data-share="false"></div>')
+    var d = $('<div/>').append($('<div class="fb-like" data-href="' + location.href + '" data-layout="button_count" data-action="like" data-show-faces="true" data-share="false"></div>'))
     setTimeout(function () {
         waitForFacebook(function () {
             FB.XFBML.parse()
