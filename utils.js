@@ -7,13 +7,6 @@ function isRetina() {
     return window.devicePixelRatio > 1
 }
 
-function drawForkMe() {
-    var m = window.location.href.match(/([^\/\.]+)\.github\.io\/([^\/]+)/)
-    if (!m) return $('<div/>')
-    var url = 'https://github.com/' + m[1] + '/' + m[2]    
-    return $('<a href="' + url + '"><img width="64px" style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>')
-}
-
 function getWindowSize() {
     return [window.innerWidth, window.innerHeight]
 }
@@ -180,49 +173,6 @@ function comparator(f, desc) {
         if (a > b) return desc ? -1 : 1
         return 0
     }
-}
-
-function drawShareButtons(message, url, cb) {
-    var d = $('<div/>')
-
-    var shares = [
-        {
-            type : 'facebook',
-            img : 'facebook_grey.png',
-            url : createFacebookShareLink(url, '', message, '')
-        },
-        {
-            type : 'twitter',
-            img : 'twitter_grey.png',
-            url : createTwitterShareLink(message + ' ' + url)
-        },
-        {
-            type : 'google+',
-            img : 'google_plus_grey.png',
-            url : createGooglePlusShareLink(url)
-        }
-    ]
-
-    _.each(shares, function (share, i) {
-        d.append($('<img style="cursor:pointer;' + (i < shares.length - 1 ? 'margin-right:10px' : '') + '"/>').attr('src', share.img).click(function () {
-            cb(share.type)
-            window.open(share.url, 'share url', 'height=400,width=500,resizable=yes')
-        }))
-    })
-
-    return d
-}
-
-function createFacebookShareLink(url, img, title, summary) {
-    return 'http://www.facebook.com/sharer/sharer.php?s=100&p[url]=' + _.escapeUrl(url) + '&p[images][0]=' + _.escapeUrl(img) + '&p[title]=' + _.escapeUrl(title) + '&p[summary]=' + _.escapeUrl(summary)
-}
-
-function createTwitterShareLink(tweet) {
-    return 'http://twitter.com/home?status=' + _.escapeUrl(tweet)
-}
-
-function createGooglePlusShareLink(url) {
-    return 'https://plus.google.com/share?url=' + _.escapeUrl(url)
 }
 
 function splitSizeHelper2(size) {

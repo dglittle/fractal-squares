@@ -23,6 +23,7 @@ th, td {
 <script src="http://dglittle.github.io/gl519/random.js"></script>
 <script src="http://dglittle.github.io/gl519/aes.js"></script>
 <script src="utils.js"></script>
+<script src="social.js"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -146,7 +147,8 @@ $(function () {
     $('body').append(main)
 
     function update() {
-        var size = _.min(getWindowSize())
+        var ws = getWindowSize()
+        var size = Math.min(ws[0], ws[1] - 30)
         if (isRetina()) {
             var c = $('<canvas style="position:absolute;left:0px;top:0px;width:' + size + 'px;height' + size + ':px"/>').attr({ width : size*2, height : size*2 })
         } else {
@@ -241,100 +243,29 @@ $(function () {
             _.each(buttons, function (b, i) {
                 b.myCss('left:' + size + 'px;top:' + (i*b.height()) + 'px')
             })
+            main.append(drawFacebookButton().myCss('position:absolute;left:0px;top:' + size + 'px'))
+            main.append(drawTwitterButton().myCss('position:absolute;left:100px;top:' + size + 'px'))
         } else {
             _.each(buttons, function (b, i) {
                 b.myCss('top:' + size + 'px;left:' + (i*b.width()) + 'px')
             })
+            var y = size + buttons[0].height()
+            main.append(drawFacebookButton().myCss('position:absolute;left:0px;top:' + y + 'px'))
+            main.append(drawTwitterButton().myCss('position:absolute;left:100px;top:' + y + 'px'))
         }
         main.myAppend(buttons)
 
         var instructions = null
         if (showInstructions) {
-            main.append(instructions = $('<div style="font-size:' + size/28 + 'px;position:absolute;left:0px;top:' + size*3/4 + 'px;width:' + size + 'px;text-align:center"/>').html('drag center of a square to move<br/>drag edge of a square to rotate and resize'))
+            main.append(instructions = $('<div style="font-size:' + size/28 + 'px;position:absolute;left:0px;top:' + size*3/4 + 'px;width:' + size + 'px;text-align:center"/>').html('drag center of a square to move it<br/>drag edge of a square to rotate and resize it'))
         }
     }
     update()
     $(window).resize(update)
 
     initFacebook('303587479797210')
+    initTwitter()
 })
-
-function initFacebook(appId) {
-    var callbacks = []
-
-    $('body').prepend($('<div id="fb-root"></div>'))
-    $.ajaxSetup({ cache: true });
-    $.getScript('//connect.facebook.net/en_UK/all.js', function(){
-        FB.init({
-            appId: appId,
-        });     
-        $('#loginbutton,#feedbutton').removeAttr('disabled');
-        // FB.getLoginStatus(updateStatusCallback);
-
-        _.each(callbacks, function (f) { f() })
-        callbacks = null
-    });
-
-    waitForFacebook = function (func) {
-        if (!callbacks) func()
-        else callbacks.push(func)
-    }
-}
-
-// from: http://stackoverflow.com/a/5303242/945521
-if (XMLHttpRequest.prototype.sendAsBinary === undefined) {
-    XMLHttpRequest.prototype.sendAsBinary = function(string) {
-        var bytes = Array.prototype.map.call(string, function(c) {
-            return c.charCodeAt(0) & 0xff;
-        });
-        this.send(new Uint8Array(bytes).buffer);
-    };
-}
-
-function canvasToPng(c) {
-    var data = c[0].toDataURL("image/png")
-    data = data.slice(data.indexOf(',') + 1)
-    data = Base64.decode(data)
-    return data
-}
-
-// adapted from http://www.heroesgenerator.com/
-function postPngToFacebook(imageData, message) {
-    function doPost() {
-        var authToken = FB.getAuthResponse()['accessToken']
-        var filename = 'image.png'
-        var mimeType = 'image/png'
-
-        var boundary = '----ThisIsTheBoundary1234567890'
-        var formData = '--' + boundary + '\r\n'
-        formData += 'Content-Disposition: form-data; name="source"; filename="' + filename + '"\r\n'
-        formData += 'Content-Type: ' + mimeType + '\r\n\r\n'
-        formData += imageData
-        formData += '\r\n'
-        formData += '--' + boundary + '\r\n'
-        formData += 'Content-Disposition: form-data; name="message"\r\n\r\n'
-        formData += message + '\r\n'
-        formData += '--' + boundary + '--\r\n'
-        
-        var xhr = new XMLHttpRequest()
-        xhr.open('POST', 'https://graph.facebook.com/me/photos?access_token=' + authToken, true)
-        xhr.onload = xhr.onerror = function() {
-            console.log(xhr.responseText)
-        }
-        xhr.setRequestHeader("Content-Type", "multipart/form-data; boundary=" + boundary)
-        xhr.sendAsBinary(formData)
-    }
-
-    waitForFacebook(function () {
-        FB.getLoginStatus(function(res) {
-            if (res.status == 'connected') {
-                doPost()
-            } else {
-                FB.login(doPost, { scope : 'publish_stream' })
-            }
-        })
-    })
-}
 
 </script>
 
