@@ -232,8 +232,9 @@ $(function () {
             //     }, 200)
             // }),
             drawButton($('<div/>').html('post<br/>image to<br/>facebook'), function () {
-                var m = prompt('message to post with image?', 'I drew this using ' + location.href)
-                if (m) postCanvasToFacebook(c, m)
+                var png = canvasToPng(c)
+                var m = prompt('message to post with image:', 'I drew this using ' + location.href)
+                if (m) postPngToFacebook(png, m)
             })
         ]
         if (size + buttons[0].width() <= getWindowSize()[0]) {
@@ -290,10 +291,20 @@ if (XMLHttpRequest.prototype.sendAsBinary === undefined) {
     };
 }
 
+function canvasToPng(c) {
+    var data = c[0].toDataURL("image/png")
+    data = data.slice(data.indexOf(',') + 1)
+    data = Base64.decode(data)
+    return data
+}
+
 // adapted from http://www.heroesgenerator.com/
-function postCanvasToFacebook(c, message) {
-    function postImageToFacebook(authToken, filename, mimeType, imageData, message)
-    {
+function postPngToFacebook(imageData, message) {
+    function doPost() {
+        var authToken = FB.getAuthResponse()['accessToken']
+        var filename = 'image.png'
+        var mimeType = 'image/png'
+
         var boundary = '----ThisIsTheBoundary1234567890'
         var formData = '--' + boundary + '\r\n'
         formData += 'Content-Disposition: form-data; name="source"; filename="' + filename + '"\r\n'
@@ -314,19 +325,12 @@ function postCanvasToFacebook(c, message) {
         xhr.sendAsBinary(formData)
     }
 
-    function helper() {
-        postImageToFacebook(FB.getAuthResponse()['accessToken'], 'testing1', 'image/png', data, message)
-    }
-
-    var data = c[0].toDataURL("image/png")
-    data = data.slice(data.indexOf(',') + 1)
-    data = Base64.decode(data)
     waitForFacebook(function () {
         FB.getLoginStatus(function(res) {
             if (res.status == 'connected') {
-                helper()
+                doPost()
             } else {
-                FB.login(helper, { scope : 'publish_stream' })
+                FB.login(doPost, { scope : 'publish_stream' })
             }
         })
     })
