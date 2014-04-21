@@ -261,8 +261,8 @@ $(function () {
         main.append(drawFacebookButton().myCss('position:absolute;left:0px;top:' + y + 'px;padding:5px'))
         main.append(drawTwitterButton().myCss('position:absolute;left:100px;top:' + y + 'px;padding:5px'))
 
-        main.append(drawForkMe().myCss('top:' + (y + 30 - 64) + 'px').rotate(90))        
-
+        y = Math.max(y + 30, ws[1])
+        main.append(drawForkMe().myCss('top:' + (y - 64) + 'px').rotate(90))
     }
     update()
     $(window).resize(update)
